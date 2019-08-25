@@ -6,8 +6,8 @@ import gc
 
 # construct an I2C bus
 i2c_dev = I2CAdapter(scl=Pin(5), sda=Pin(4), freq=100000)
-i2c_dev.scan()
-sensor = bme680.BME680(i2c_device=i2c_dev)
+sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY, i2c_device=i2c_dev)
+
 # These oversampling settings can be tweaked to
 # change the balance between accuracy and noise in
 # the data.
