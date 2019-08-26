@@ -14,7 +14,6 @@ eventlet.monkey_patch()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 socketio = SocketIO(app)
 
 clients = []
@@ -25,7 +24,7 @@ def index():
     """
     Serve a JS page that upgrades you to a websocket.
     """
-    return render_template('base.html')
+    return render_template('index.html')
 
 
 @socketio.on('connect')
