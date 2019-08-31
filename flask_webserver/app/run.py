@@ -1,10 +1,9 @@
-from flask import Flask, render_template, Response, session, request
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 import eventlet
 import json
 import datetime
-import time
-import random
+
 # If eventlet or gevent are used, then monkey
 # patching the Python standard library is
 # normally required to force the message
@@ -37,11 +36,6 @@ def on_connect():
 def on_disconnect():
     print('Client disconnected: ', request.sid)
     clients.remove(request.sid)
-
-
-@socketio.on('my event')
-def handle_my_event(json):
-    print('received message from js_client', json)
 
 
 @socketio.on('bme680_data')

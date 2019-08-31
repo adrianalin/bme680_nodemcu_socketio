@@ -57,83 +57,12 @@
         </div>
     </div>
 
-<script type="text/javascript">
-    var socket = io();
-
-    google.charts.load('current', {'packages':['gauge']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-
-        var tempData = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['Temp C', 80]
-        ]);
-
-        var humData = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['Humidity', 80]
-        ]);
-
-        var pressureData = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['Pressure', 80]
-        ]);
-
-
-        var temperatureOptions = {
-            min        : -20,
-            max        : 50,
-            greenFrom  : 20,
-            greenTo    : 25,
-            yellowFrom : 25,
-            yellowTo   : 30,
-            redFrom    : 30,
-            redTo      : 50,
-            minorTicks : 4,
-            majorTicks : ['-20', '-10', '0', '10', '20', '30', '40', '50']
-        };
-
-        var humidityOptions = {
-            min        : 0,
-            max        : 100,
-            minorTicks : 4,
-            greenFrom  : 30,
-            greenTo    : 60,
-            majorTicks : ['0', '20', '40', '60', '80', '100']
-        };
-
-        var pressureOptions = {
-            min        : 900,
-            max        : 1000,
-            minorTicks : 4,
-            majorTicks : ['Stormy', 'Rain', 'Change', 'Fair', 'Dry']
-        };
-
-        var temp_chart = new google.visualization.Gauge(document.getElementById('temperature-gauge'));
-        var humidity_chart = new google.visualization.Gauge(document.getElementById('humidity-gauge'));
-        var pressure_chart = new google.visualization.Gauge(document.getElementById('pressure-gauge'));
-
-        socket.on('js_client', function(recv_data) {
-            const json_data = JSON.parse(recv_data);
-
-            tempData.setValue(0, 1, json_data.temperature);
-            temp_chart.draw(tempData, temperatureOptions);
-
-            humData.setValue(0, 1, json_data.humidity);
-            humidity_chart.draw(humData, humidityOptions);
-
-            pressureData.setValue(0, 1, json_data.pressure);
-            pressure_chart.draw(pressureData, pressureOptions);
-        });
-
-    }
-</script>
-
-
 <script type="text/javascript" charset="utf-8">
-$(document).ready(function () {
-    var socket = io();
+var socket = io();
+google.charts.load('current', {'packages':['gauge']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
 
     var chartOptions = {
             responsive: true,
@@ -207,9 +136,56 @@ $(document).ready(function () {
     const lineChartHumidity = new Chart($('#humidityChart'), humidityChartData);
     const lineChartPresure = new Chart($('#pressureChart'), pressureChartData);
 
-    socket.on('connect', function() {
-        socket.emit('my event', {data: 'I\'m connected!'});
-    });
+
+    var tempGaugeData = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Temp C', 80]
+    ]);
+
+    var humGaugeData = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Humidity', 80]
+    ]);
+
+    var pressureGaugeData = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Pressure', 80]
+    ]);
+
+
+    var temperatureOptions = {
+        min        : -20,
+        max        : 50,
+        greenFrom  : 20,
+        greenTo    : 25,
+        yellowFrom : 25,
+        yellowTo   : 30,
+        redFrom    : 30,
+        redTo      : 50,
+        minorTicks : 4,
+        majorTicks : ['-20', '-10', '0', '10', '20', '30', '40', '50']
+    };
+
+    var humidityOptions = {
+        min        : 0,
+        max        : 100,
+        minorTicks : 4,
+        greenFrom  : 30,
+        greenTo    : 60,
+        majorTicks : ['0', '20', '40', '60', '80', '100']
+    };
+
+    var pressureOptions = {
+        min        : 900,
+        max        : 1000,
+        minorTicks : 4,
+        majorTicks : ['Stormy', 'Rain', 'Change', 'Fair', 'Dry']
+    };
+
+    var temp_gauge = new google.visualization.Gauge(document.getElementById('temperature-gauge'));
+    var humidity_gauge = new google.visualization.Gauge(document.getElementById('humidity-gauge'));
+    var pressure_gauge = new google.visualization.Gauge(document.getElementById('pressure-gauge'));
+
 
     socket.on('js_client', function(data) {
         const json_data = JSON.parse(data);
@@ -238,9 +214,18 @@ $(document).ready(function () {
         pressureChartData.data.labels.push(json_data.timestamp);
         pressureChartData.data.datasets[0].data.push(json_data.pressure);
         lineChartPresure.update();
-    });
 
-});
+
+        tempGaugeData.setValue(0, 1, json_data.temperature);
+        temp_gauge.draw(tempGaugeData, temperatureOptions);
+
+        humGaugeData.setValue(0, 1, json_data.humidity);
+        humidity_gauge.draw(humGaugeData, humidityOptions);
+
+        pressureGaugeData.setValue(0, 1, json_data.pressure);
+        pressure_gauge.draw(pressureGaugeData, pressureOptions);
+    });
+}
 </script>
 
     <!-- Optional JavaScript -->
