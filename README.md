@@ -7,4 +7,6 @@ needed for NodeMCU.
 Don't forget to set your SSID credentials in boot.py. You also need to use `mpy-cross` in order to compile the `*.py`
 files (otherwise you get `MemoryError: memory allocation failed`).
 
+I also wrote a more detailed blog post https://www.popsblog.me/post/23.
+
 ![](https://github.com/adrianalin/bme680_nodemcu_socketio/blob/master/screenshot.gif)
